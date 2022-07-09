@@ -116,8 +116,8 @@ SOCIALACCOUNT_PROVIDERS = {
 
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
-LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/'
-LOGOUT_REDIRECT_URL = 'http://127.0.0.1:8000/'
+LOGIN_REDIRECT_URL = 'https://e-venting.herokuapp.com/'
+LOGOUT_REDIRECT_URL = 'https://e-venting.herokuapp.com/'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
