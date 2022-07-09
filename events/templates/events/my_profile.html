@@ -1,0 +1,84 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+    <center>
+    <br>
+    <h1>Profile Details</h1><br><br>
+    </center>
+    <div class="card shadow" style="background-color: rgba(255,255,255,.40); border:none;">
+        <div class="card-body">
+            <h5 class="card-title">
+                <strong>My Details</strong><br><br>
+            </h5>
+            <p class="card-text"><strong>Name : </strong>{{user.first_name}} {{user.last_name}}</p>
+            <p class="card-text"><strong>Username : </strong>{{user}}</p>
+            <p class="card-text"><strong>Email : </strong>{{user.email}}</p>
+            <p class="card-text"><strong>Profile Status :</strong> 
+                {% if user.has_usable_password and user.email%}
+                    Completed <br>
+                    <div align='right' style='margin-right:15px;'>
+                        <a href="{% url 'update-profile' %}" style="text-decoration:none;"> Update Profile</a>
+                    </div>
+                {% else %}
+                    Incomplete, <a href="{% url 'update-profile' %}"> Complete Here</a>
+                {% endif %}
+            </p>                
+        </div>
+    </div>
+    <br><br>
+    <h3>Events You're Managing</h3><br>
+    {% if events %}
+            <table class="table table-hover">
+                {% for event in events %} 
+                {% if event.approved %}
+                    <tr>
+                        <td>
+                            {{event.event_date}} - 
+                            <a href="{% url 'show-event' event.id%}" style="text-decoration: none;">
+                                {% if event.Is_past == 'Past' %}
+                                    <del>{{event}}</del>
+                                {% else %}
+                                    {{event}}
+                                {%endif%}
+                            </a>
+                            {%if event.Days_till == '0:00:00'%}
+                                (Today)
+                            {% endif %}
+                        </td>
+                        <td align='right'>
+                            <a href="{% url 'update-event' event.id%}" class="btn btn-outline-secondary btn-sm">Update</a>
+                            <a href="{% url 'delete-event' event.id%}" class="btn btn-outline-danger btn-sm">Delete</a>
+                        </td>
+                    </tr> 
+                    {% endif %}
+                {% endfor %}
+            </table>
+    {% else %}
+        <strong style="color:#800000;">You are not managing any event!</strong>
+    {% endif %}
+
+    <br><br><br>
+    <h3>Venues You Own</h3><br>
+    {% if venues %}
+        <table class="table table-hover">
+            {% for venue in venues %} 
+                <tr>
+                    <td>
+                        <a href="{% url 'show-venue' venue.id%}" style="text-decoration: none;">{{venue}}</a>
+                    </td>
+                    {%if user.is_authenticated and user.id == venue.owner %}
+                    <td align='right'>
+                        <a href="{% url 'update-venue' venue.id%}" class="btn btn-outline-secondary btn-sm">Update</a>
+                        <a href="{% url 'delete-venue' venue.id%}" class="btn btn-outline-danger btn-sm">Delete</a>
+                    </td>
+                    {% else %}
+                        <td align='right'/>
+                    {%endif%}
+                </tr> 
+            {% endfor %}
+        </table>
+    {% else %}
+        <strong style="color:#800000;">You don't have any venues!</strong>
+    {% endif %}
+    <br><br><br><br><br><br>
+{% endblock %}

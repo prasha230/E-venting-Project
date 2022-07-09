@@ -1,0 +1,53 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+        {% if searched %}
+            <h2>You Searched for "{{searched}}"</h2> <br>   
+            {% if venues %}
+                {% for venue in venues %}
+                <div class="card">
+                    <div class="card-header">
+                        <strong>{{venue}}</strong>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <ul>
+                                {%if venue.address %}
+                                <li>Address : {{venue.address}}</li>
+                                {%endif%}
+
+                                {%if venue.pin_code %}
+                                <li>Pin Code : {{venue.pin_code}}</li>
+                                {%endif%}
+
+                                {%if venue.phone %}
+                                <li>Phone : {{venue.phone}}</li>
+                                {%endif%}
+
+                                {%if venue.web %}
+                                <li>Website : <a href="{{venue.web}}">{{venue.web}}</a></li>
+                                {%endif%}
+
+                                {%if venue.email %}
+                                <li>Email : {{venue.email}}</li>
+                                {%endif%}
+                                
+                                <br>
+                                {%if venue.owner %}
+                                <li>Owner ID : {{venue.owner}}</li>
+                                {%endif%}
+                            </ul>
+                        </p>
+                    </div>
+                </div>  
+                <br>
+                {% endfor %}
+            {% else %}
+                <br><h6><font color='red'>Sorry, No Venue Found...</font></h6><br>
+            {% endif %}
+            </table>
+        {% else %}
+            <h2>Oops! You forgot to search for a Venue</h2><br><br>
+            <h6><a class="nav-link" href="{% url 'home' %}">Go to Homepage</a></h6>
+        {% endif %}
+{% endblock %}

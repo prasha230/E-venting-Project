@@ -1,0 +1,31 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+    <h2>My Events</h2><br>
+    <table class="table table-hover">
+        {% for event in events %} 
+            {% if event.approved %}
+            <tr>
+                <td>
+                    <a href="{% url 'show-event' event.id%}" style="text-decoration: none;">
+                        {% if event.Is_past == 'Past' %}
+                            <del>{{event}}</del>
+                        {% else %}
+                            {{event}}
+                        {% endif %}
+                    </a>
+                </td>
+                {%if user.is_authenticated and user == event.manager%}    
+                <td align='right'>
+                    <a href="{% url 'update-event' event.id%}" class="btn btn-outline-secondary btn-sm">Update</a>
+                    <a href="{% url 'delete-event' event.id%}" class="btn btn-outline-danger btn-sm">Delete</a>
+                </td>
+                {% else %}
+                    <td align='right'/>
+                {% endif %}
+            </tr> 
+            {% endif %}
+        {% endfor %}
+    </table>
+
+{% endblock %}

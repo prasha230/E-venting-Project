@@ -1,0 +1,29 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+    {%if user.is_authenticated %}
+        <center>
+        <h1>Add Event to the Database</h1>
+        </center>
+        <br>
+        {% if submitted %}
+            Event Submitted Successfully!!
+        {% else %}
+            <form action='' method='POST'>
+                {% csrf_token %}
+                {{form.as_p}}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="invite">Invite Attendees via e-mail?
+                </div>
+                <center>
+                <input type='submit' value='Submit' class='btn btn-secondary'>
+                </center>
+            </form>
+        {% endif %}
+    {%else%}
+        <center>
+            <h1>You Must be signed in to view this page!!</h1><br><br>
+            <h6><a class="nav-link" href="{% url 'login' %}">Login Here</a></h6>
+        </center>
+    {%endif%}
+{% endblock %}

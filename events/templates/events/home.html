@@ -1,0 +1,52 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+    <center>
+    <br>
+    <h1>Welcome {{ name|title }}, Enjoy the Events!!</h1>
+    <br><strong>As of {{time}} </strong><br><br>
+    <div class="shadow p-4 mb-4" style="border-radius: 15px; width:22%; min-width:285px; min-height:240px; background-color: rgba(255,255,255,.40); border:none;">
+        {{ cal|safe }}
+    </div>
+    <br><br>
+    {% if event_list %}
+        <h2>Events for {{ month }},{{ year }}</h2><br>
+    </center>
+        <table class="table table-hover">
+            {% for event in event_list %} 
+            {% if event.approved %}
+                <tr>
+                    <td>
+                        {{event.event_date}} - 
+                        <a href="{% url 'show-event' event.id%}" style="text-decoration: none;">
+                            {% if event.Is_past == 'Past' %}
+                                <del>{{event}}</del>
+                            {% else %}
+                                {{event}}
+                            {%endif%}
+                        </a>
+                        {%if event.Days_till == '0:00:00'%}
+                            (Today)
+                        {% endif %}
+                    </td>
+                    {%if user.is_authenticated and user == event.manager %}
+                    <td align='right'>
+                        <a href="{% url 'update-event' event.id%}" class="btn btn-outline-secondary btn-sm">Update</a>
+                        <a href="{% url 'delete-event' event.id%}" class="btn btn-outline-danger btn-sm">Delete</a>
+                    </td>
+                    {% else %}
+                        <td align='right'/>
+                    {% endif %}
+                </tr> 
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% else %}
+        <strong>No events this month...</strong>
+    {% endif %}
+    <center>
+    <br><br><br>
+    <div style="font-size:15px;"><strong>Copyright (c) {{current_year}},{{time}}</strong></div>
+    <br><br>
+    </center>
+{% endblock %}

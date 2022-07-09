@@ -1,0 +1,26 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+    {% if form.errors %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>There was an error in the form!</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    <div class="d-flex flex-column align-items-center">
+    <h1>Update Profile</h1>
+    <br>
+    <br>
+    <div class="shadow p-5 mb-5 w-75 bg-body " style="border-radius: 10px;">
+        <form action="{% url 'update-profile' %}" method='POST'>
+            {% csrf_token %}
+                {{ form.as_p }}
+                <br><br>
+            <center>
+            <input type='submit' value='Update' class='btn btn-secondary'>
+            </p>
+            </center>
+        </form>
+    </div>
+    </div>
+{% endblock %}
