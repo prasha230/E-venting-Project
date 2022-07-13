@@ -232,12 +232,13 @@ def search_venues(request):
 
 
 def search_events(request):
+    all_events=Event.objects.all()
     if request.method == 'POST':
         searched = request.POST['searched']
-        events = Event.objects.filter(description__contains=searched)
-        return render(request, 'events/search_events.html', {'searched': searched, 'events': events})
+        events = Event.objects.filter(name__contains=searched)
+        return render(request, 'events/search_events.html', {'searched': searched, 'events': events,'all_events':all_events})
     else:
-        return render(request, 'events/search_events.html', {})
+        return render(request, 'events/search_events.html', {'all_events':all_events})
 
 
 def show_venue(request, venue_id):

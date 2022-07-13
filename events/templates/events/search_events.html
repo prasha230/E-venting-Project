@@ -12,7 +12,19 @@
     <div class="card-body">
         <form  method=POST action="{% url 'search-events' %}">
             {% csrf_token %}
-            <input class="form-control me-2" type="search" placeholder="Search Events" aria-label="Search" name="searched"><br>
+            <input class="form-control me-2" id="events_drop" type="search" placeholder="Search Events" aria-label="Search" name="searched"><br>
+            <script>
+                $( function() {
+                    var availableTags = [
+                        {% for eve in all_events %}
+                            "{{eve}}",
+                        {% endfor %}
+                    ];
+                    $( "#events_drop" ).autocomplete({
+                        source: availableTags
+                    });
+                });
+                </script>
             <button class="btn btn-outline-secondary" type="submit">Search</button>
         </form>  
     </div>
