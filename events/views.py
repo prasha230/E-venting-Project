@@ -1,4 +1,6 @@
 # from urllib import request
+from genericpath import exists
+from unicodedata import name
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect, render
 import calendar
@@ -17,6 +19,9 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 from members.forms import RegisterUserForm
 from django.contrib.auth import authenticate, login
+# import json
+from .serializers import VenueSerializers
+from rest_framework import generics
 
 def update_profile(request):
     user=User.objects.get(pk=request.user.id)
@@ -316,3 +321,19 @@ def home(request, year=datetime.now().year, month=datetime.now().strftime('%B'))
         "time": time,
         "event_list": event_list,
     })
+
+
+
+# def venues_json(request,venue_id):
+#     if Venue.objects.filter(pk=venue_id).exists():
+#         venue = Venue.objects.get(pk=venue_id)
+#         l=[venue.name,venue.address,venue.phone,venue.web]
+#     else:
+#         l=[]
+#     return HttpResponse(json.dumps(l))
+
+
+
+class VenueList(generics.ListAPIView):
+    queryset = Venue.objects.all()
+    serializer_class = VenueSerializers
