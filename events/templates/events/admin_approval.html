@@ -52,6 +52,7 @@
             </thead>
             <tbody>
                 {% for event in event_list  %}
+                    {% if event.Is_past == 'Future' %}
                     <tr>
                         <td><a href="{% url 'show-event' event.id%}" style="text-decoration:none;">{{event}}</a></td>
                         <td>
@@ -66,6 +67,7 @@
                             {% endif %}
                         </td>
                     </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>
