@@ -38,7 +38,7 @@
                 <strong>{{event}}</strong>
             </div>
             <div class="card-body">
-                <h5 class="card-title">Venue : {{event.venue}}</h5>
+                <h5 class="card-title">Venue : <a href={% url 'show-venue' event.venue.id%} style="text-decoration: none;">{{event.venue}}</a></h5>
                 <p class="card-text">
                     <ul>
                         <li>Event Date : {{event.event_date}}</li>
