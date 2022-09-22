@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .views import VenueList
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -25,6 +24,6 @@ urlpatterns = [
     path('show_event/<event_id>', views.show_event, name='show-event'),
     path('my_profile', views.my_profile, name='my-profile'),
     path('update_profile', views.update_profile, name='update-profile'),
-    path('venues_json', VenueList.as_view(), name='venues-json'),
-
+    path('venues_json', views.venues_json, name='venues-json'),
+    path('venues_json/<venue_id>', views.venues_json, name='venues-json'),
 ]

@@ -1,11 +1,13 @@
 # from urllib import request
 from genericpath import exists
+from typing import overload
 from unicodedata import name
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect, render
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
+from requests import Response
 from .models import Event, Venue
 from django.contrib.auth.models import User
 from .forms import VenueForm, EventForm, EventFormAdmin
@@ -22,6 +24,10 @@ from django.contrib.auth import authenticate, login
 # import json
 from .serializers import VenueSerializers
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
+
 
 def update_profile(request):
     user=User.objects.get(pk=request.user.id)
@@ -199,10 +205,6 @@ def add_event(request):
                 event = form.save(commit=False)
                 event.manager = request.user
                 event.save()
-                if request.POST['invite']:
-                    id_list = request.POST.getlist('attendees')
-                    for a in id_list:
-                        print(User.objects.get(pk=a).email)             #send invite emails from here
                 return HttpResponseRedirect('/add_event?submitted=True')
     else:
         # Just going to the page, Not Submitting
@@ -211,8 +213,6 @@ def add_event(request):
         else:
             form = EventForm
         if 'submitted' in request.GET:
-            if request.POST.get('invite'):
-                print("it worked, invited")
             submitted = True
     return render(request, 'events/add_event.html', {'form': form, 'submitted': submitted})
 
@@ -323,17 +323,13 @@ def home(request, year=datetime.now().year, month=datetime.now().strftime('%B'))
     })
 
 
-
-# def venues_json(request,venue_id):
-#     if Venue.objects.filter(pk=venue_id).exists():
-#         venue = Venue.objects.get(pk=venue_id)
-#         l=[venue.name,venue.address,venue.phone,venue.web]
-#     else:
-#         l=[]
-#     return HttpResponse(json.dumps(l))
-
-
-
-class VenueList(generics.ListAPIView):
-    queryset = Venue.objects.all()
-    serializer_class = VenueSerializers
+@api_view(['GET'])
+def venues_json(request,venue_id=-1):
+    if venue_id == -1:
+        venue = Venue.objects.all()
+        serializer = VenueSerializers(venue,many=True)
+    else:
+        if Venue.objects.filter(pk=venue_id).exists():
+            venue = Venue.objects.get(pk=venue_id)
+            serializer = VenueSerializers(venue)
+    return Response(serializer.data)

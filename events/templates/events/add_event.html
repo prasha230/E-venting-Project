@@ -12,9 +12,7 @@
             <form action='' method='POST'>
                 {% csrf_token %}
                 {{form.as_p}}
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="invite">Invite Attendees via e-mail?
-                </div>
+
                 <center>
                 <input type='submit' value='Submit' class='btn btn-secondary'>
                 </center>
